@@ -1,4 +1,4 @@
-# Temporarly anonymized repository of ARCUS
+# Temporary repository of ARCUS
 (submitted to KDD22)
 
 ## Required packages
