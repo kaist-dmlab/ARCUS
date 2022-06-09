@@ -3,7 +3,6 @@
 import math
 import numpy as np
 
-
 def centering(K):
     n = K.shape[0]
     unit = np.ones([n, n])

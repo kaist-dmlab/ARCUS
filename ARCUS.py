@@ -1,3 +1,4 @@
+from pkg_resources import to_filename
 import tensorflow as tf
 import pandas as pd
 import numpy as np
@@ -6,46 +7,64 @@ from CKA import linear_CKA, kernel_CKA
 from model.model_RSRAE import RSRAE
 from model.model_RAPP import RAPP
 from model.model_DAGMM import DAGMM
+
 tf.keras.backend.set_floatx('float64')
 
 class ARCUS:
-    def init_model(self, model_type, layer_size, min_batch, learning_rate, input_dim, random_seed, intrinsic_size, RSRAE_hidden_layer_size):
+    def init_model(self, 
+                   model_type: str, 
+                   layer_size, 
+                   learning_rate: float, 
+                   input_dim, 
+                   random_seed: int, 
+                   intrinsic_size,
+                   RSRAE_hidden_layer_size):
+        # initialize ARCUS framework
         if model_type == "RSRAE":
-            model =  RSRAE(
-                hidden_layer_sizes = [input_dim] + RSRAE_hidden_layer_size, #[input_dim, 32, 64, 128]: default
-                learning_rate = learning_rate, 
-                bn = True,
-                activation = 'relu',
-                intrinsic_size = intrinsic_size, 
-                random_seed = random_seed, 
-                name = "RSRAE")
+            model =  RSRAE(hidden_layer_sizes = [input_dim] + RSRAE_hidden_layer_size, #[input_dim, 32, 64, 128]: default
+                           learning_rate = learning_rate, 
+                           bn = True,
+                           activation = 'relu',
+                           intrinsic_size = intrinsic_size, 
+                           random_seed = random_seed, 
+                           name = "RSRAE")
+
         elif model_type == "RAPP":
             model = RAPP(hidden_layer_sizes = layer_size,
-                learning_rate = learning_rate,
-                bn = True,
-                activation = 'relu',
-                random_seed = random_seed,
-                name = 'RAPP')
+                         learning_rate = learning_rate,
+                         bn = True,
+                         activation = 'relu',
+                         random_seed = random_seed,
+                         name = 'RAPP')
+
         elif model_type == "DAGMM":
-            model = DAGMM(
-                comp_hidden_layer_sizes = layer_size, 
-                comp_activation = 'tanh',
-                est_hidden_layer_sizes = [3, 10, 4],
-                est_activation = 'tanh',
-                learning_rate = learning_rate,
-                bn = True,
-                est_dropout_ratio = 0.5,
-                random_seed = random_seed)
+            model = DAGMM(comp_hidden_layer_sizes = layer_size, 
+                          comp_activation = 'tanh',
+                          est_hidden_layer_sizes = [3, 10, 4],
+                          est_activation = 'tanh',
+                          learning_rate = learning_rate,
+                          bn = True,
+                          est_dropout_ratio = 0.5,
+                          random_seed = random_seed)
+
         model.num_batch = 0
         return model
 
-    def standardize_scores(self, score):
+
+    def standardize_scores(self, 
+                           score: float):
+        # get standardized anomaly scores
         mean_score = np.mean(score)
         std_score = np.std(score)
         standardized_score = np.array([(k-mean_score)/std_score for k in score])
         return standardized_score
+    
 
-    def merge_models(self, model1, model2, model_type):
+    def merge_models(self, 
+                     model1: tf.keras.Model, 
+                     model2: tf.keras.Model, 
+                     model_type: str):
+        # merge a previous model and a current model 
         num_batch_sum = model1.num_batch + model2.num_batch
         w1 = model1.num_batch/num_batch_sum
         w2 = model2.num_batch/num_batch_sum
@@ -84,7 +103,16 @@ class ARCUS:
         model2.num_batch = num_batch_sum
         return model2
 
-    def reduce_models_last(self, models, x_inp, model_type, thred, min_batch, epoch_num, itr_num):
+
+    def reduce_models_last(self, 
+                           models, 
+                           x_inp, 
+                           model_type, 
+                           thred, 
+                           min_batch, 
+                           epoch_num, 
+                           itr_num):
+        # delete similar models for reducing redundancy in a model pool
         latents = []
         for m in models:
             z = m.get_latent(x_inp)
@@ -109,7 +137,14 @@ class ARCUS:
 
         return models
 
-    def train_model(self, model, x_inp, min_batch, epoch_num, itr_num):
+
+    def train_model(self, 
+                    model: tf.keras.Model, 
+                    x_inp,
+                    min_batch, 
+                    epoch_num, 
+                    itr_num):
+        # train a model in the model pool of ARCUS
         tmp_losses = []
         for e in range(epoch_num):
             for m in range(itr_num):
@@ -124,24 +159,40 @@ class ARCUS:
         
         return tmp_losses
 
-    def simulator(self, dataset, model_type, inf_type, batch, min_batch, learning_rate, layer_num, hidden_dim, init_epoch, intm_epoch, reliability_thred, similarity_thred, rand_seed, RSRAE_hidden_layer_size):
+    def simulator(self, 
+                  dataset: tf.data.Dataset, 
+                  model_type: str, 
+                  inf_type: str, 
+                  batch: int, 
+                  min_batch: int, 
+                  learning_rate: float, 
+                  layer_num: int, 
+                  hidden_dim: int, 
+                  init_epoch: int, 
+                  intm_epoch: int, 
+                  reliability_thred: float, 
+                  similarity_thred: float, 
+                  rand_seed: int, 
+                  RSRAE_hidden_layer_size: list):
+        # Simulator for online anomaly detection
         input_dim = dataset.element_spec[0].shape[0]
         itr_num = int(batch/min_batch)
         layer_size = []   
         gap = (input_dim - hidden_dim)/(layer_num-1)
         for idx in range(layer_num):
             layer_size.append(int(input_dim-(gap*idx)))
-        #print(layer_size)
 
         models = []
         initial_model = self.init_model(model_type, layer_size, min_batch, learning_rate, input_dim, rand_seed, hidden_dim, RSRAE_hidden_layer_size)
         models.append(initial_model)
         curr_model = initial_model
-        auc_hist = []
+        
+        auc_hist   = []
         drift_hist = []
-        losses = []
+        losses     = []
         all_scores = []
         
+        # Scenario for online anomaly detection
         try:    
             for step, (x_inp, y_inp) in enumerate(dataset.batch(batch)):
                 # Initial model training
