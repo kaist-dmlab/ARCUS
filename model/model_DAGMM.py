@@ -16,8 +16,6 @@ from tensorflow.keras.layers import Dense, Layer, Dropout, BatchNormalization
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import auc,roc_curve, precision_recall_curve, average_precision_score, precision_recall_fscore_support
 
-tf.keras.backend.set_floatx('float64')
-
 class CompressionNet(Layer):
     def __init__(self,
                  hidden_layer_sizes,
@@ -128,10 +126,8 @@ class DAGMM(Model):
                  est_dropout_ratio = 0.5,
                  lambda1 = 0.1,
                  lambda2 = 0.005,
-                 random_seed = 42,
                  name = 'DAGMM'):
         super(DAGMM, self).__init__(name = name)
-        
         
         self.optimizer  = optimizers.Adam(learning_rate = learning_rate)
         
@@ -144,9 +140,6 @@ class DAGMM(Model):
                                   
         self.lambda1 = lambda1
         self.lambda2 = lambda2
-        
-        tf.random.set_seed(random_seed)
-        np.random.seed(random_seed)
         
     def call(self, x, training = False):
         x_latent, x_tilde, rec_cosine, rec_euclidean = self.compressionNet(x, training = training)

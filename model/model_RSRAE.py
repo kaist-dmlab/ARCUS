@@ -14,8 +14,6 @@ from tensorflow.keras import optimizers, Model, activations, Sequential
 from tensorflow.keras.layers import Layer, Dense, Conv2D, Conv2DTranspose, BatchNormalization, Flatten, Reshape
 from sklearn.metrics import roc_auc_score, average_precision_score
 
-tf.keras.backend.set_floatx('float64')
-
 class RSR(Layer):
     
     def __init__(self, intrinsic_size ,name = "rsr", **kwargs):
@@ -52,7 +50,6 @@ class RSRAE(Model):
                  activation = 'relu',
                  norm_type = "MSE", 
                  loss_norm_type = "MSE",
-                 random_seed = 42, 
                  name = "RSRAE", **kwargs):
         
         super(RSRAE, self).__init__(name = name, **kwargs)
@@ -86,9 +83,7 @@ class RSRAE(Model):
                 
         self.rsr     = RSR(intrinsic_size = intrinsic_size)
         self.renormaliztion = Renormalization()
-        
-        tf.random.set_seed(random_seed)
-        np.random.seed(random_seed)
+
         
     def call(self, x, training = False):
         y = self.encoder_layer(x, training = training)

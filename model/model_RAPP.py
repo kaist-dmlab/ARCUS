@@ -14,8 +14,6 @@ import numpy as np
 from tensorflow.keras.layers import Dense, Layer, LeakyReLU, BatchNormalization, Activation
 from tensorflow.keras import Model, Sequential, activations
 
-tf.keras.backend.set_floatx('float64')
-
 def SAP(H):
     hidden_difference = []
     for hidden_activation_origin_x, hidden_activation_recons_x in H:
@@ -50,7 +48,6 @@ class RAPP(Model):
                  learning_rate = 1e-4,
                  activation = 'relu',
                  bn = True,
-                 random_seed = 42,
                  name = 'RAPP'):
         super(RAPP, self).__init__(name = name)
         
@@ -85,8 +82,6 @@ class RAPP(Model):
         self.loss      = tf.keras.losses.MeanSquaredError()
         self.bn        = bn
         
-        tf.random.set_seed(random_seed)
-        np.random.seed(random_seed)
         
     def call(self, x, training = False):
         latent_x = self.encoder_layer(x, training = training)
