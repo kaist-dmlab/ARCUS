@@ -1,4 +1,3 @@
-from pkg_resources import to_filename
 import tensorflow as tf
 import pandas as pd
 import numpy as np
@@ -8,12 +7,14 @@ from model.model_RSRAE import RSRAE
 from model.model_RAPP import RAPP
 from model.model_DAGMM import DAGMM
 
-tf.keras.backend.set_floatx('float64')
-
 class ARCUS:
+    def __init__(self, args):
+        self.args = args
+
     def init_model(self, 
                    model_type: str, 
                    layer_size, 
+                   min_batch,
                    learning_rate: float, 
                    input_dim, 
                    random_seed: int, 
@@ -26,7 +27,6 @@ class ARCUS:
                            bn = True,
                            activation = 'relu',
                            intrinsic_size = intrinsic_size, 
-                           random_seed = random_seed, 
                            name = "RSRAE")
 
         elif model_type == "RAPP":
@@ -34,7 +34,6 @@ class ARCUS:
                          learning_rate = learning_rate,
                          bn = True,
                          activation = 'relu',
-                         random_seed = random_seed,
                          name = 'RAPP')
 
         elif model_type == "DAGMM":
@@ -44,15 +43,13 @@ class ARCUS:
                           est_activation = 'tanh',
                           learning_rate = learning_rate,
                           bn = True,
-                          est_dropout_ratio = 0.5,
-                          random_seed = random_seed)
+                          est_dropout_ratio = 0.5)
 
         model.num_batch = 0
         return model
 
 
-    def standardize_scores(self, 
-                           score: float):
+    def standardize_scores(self, score: float):
         # get standardized anomaly scores
         mean_score = np.mean(score)
         std_score = np.std(score)
@@ -105,13 +102,13 @@ class ARCUS:
 
 
     def reduce_models_last(self, 
-                           models, 
+                           models: tf.keras.Model, 
                            x_inp, 
-                           model_type, 
-                           thred, 
-                           min_batch, 
-                           epoch_num, 
-                           itr_num):
+                           model_type: str, 
+                           thred: float, 
+                           min_batch: int, 
+                           epoch_num: int, 
+                           itr_num: int):
         # delete similar models for reducing redundancy in a model pool
         latents = []
         for m in models:
