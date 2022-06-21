@@ -1,6 +1,4 @@
-# Repository for the source codes of ARCUS
-Adaptive Model Pooling for Online Deep Anomaly Detection from a Complex Evolving Data Stream at KDD 2022 [paper](https://arxiv.org/abs/2206.04792)
-
+# Adaptive Model Pooling for Online Deep Anomaly Detection from a Complex Evolving Data Stream
 This is the implementation of ARCUS published in KDD 2022 [[paper](https://arxiv.org/abs/2206.04792)]
 
 
