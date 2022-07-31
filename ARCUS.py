@@ -8,9 +8,6 @@ from model.model_RAPP import RAPP
 from model.model_DAGMM import DAGMM
 
 class ARCUS:
-    def __init__(self, args):
-        self.args = args
-
     def init_model(self, 
                    model_type: str, 
                    layer_size, 
