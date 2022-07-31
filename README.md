@@ -1,5 +1,6 @@
-# Temporary repository of ARCUS
-(submitted to KDD22)
+# Adaptive Model Pooling for Online Deep Anomaly Detection from a Complex Evolving Data Stream
+This is the implementation of ARCUS published in KDD 2022 [[paper](https://arxiv.org/abs/2206.04792)]
+
 
 ## Required packages
 - Tensorflow 2.2.0
@@ -22,6 +23,7 @@
 - init_epoch: initial number of epochs for creating models (default: 5)
 - intm_epoch: interim number of epochs for training models after initialization  (default: 1)
 - hidden_dims: latent dimensionality of AE (default: the number of pricipal component explaining at least 70% of variance)
+- layer_num: the number of layers in AE
 - model_type: type of model, one of ["RAPP", "RSRAE", "DAGMM"]
 - inf_type: type of inference, one of ["INC", "ADP"] where "INC" for incremental and "ADP" for adaptive (proposed)
 
@@ -48,3 +50,14 @@ AUC: 0.909
 
 ## Default model layer size (learning rate) used for ARCUS
 <img src="figures/ARCUS_params.jpg" width="350">
+
+## 5. Citation
+```
+@inproceedings{yoon2022arcus,
+  title={Adaptive Model Pooling for Online Deep Anomaly Detection from a Complex Evolving Data Stream},
+  author={Yoon, Susik, and Lee, Youngjun, and Lee, Jae-Gil and Lee, Byung Suk},
+  booktitle={Proceedings of the 28th ACM SIGKDD International Conference on Knowledge Discovery \& Data Mining},
+  pages={--},
+  year={2022}
+}
+```
