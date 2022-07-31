@@ -9,7 +9,6 @@
 # }
 
 import tensorflow as tf
-import numpy as np
 
 from model.model_base import BaseModel
 from tensorflow.keras.layers import Dense, Layer, LeakyReLU, BatchNormalization, Activation
