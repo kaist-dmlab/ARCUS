@@ -27,28 +27,32 @@ class ModelGenerator:
         # initialize ARCUS framework
         if self.model_type == "RSRAE":
             model =  RSRAE(hidden_layer_sizes = [self.input_dim] + self.RSRAE_hidden_layer_size, #[input_dim, 32, 64, 128]: default
-                            activation = 'relu',
-                            intrinsic_size = self.intrinsic_size, 
-                            learning_rate = self.learning_rate, 
-                            bn = True,
-                            name = "RSRAE")
+                           activation = 'relu',
+                           intrinsic_size = self.intrinsic_size, 
+                           learning_rate = self.learning_rate, 
+                           bn = True,
+                           name = "RSRAE")
 
         elif self.model_type == "RAPP":
             model = RAPP(hidden_layer_sizes = self.layer_size,
-                            activation = 'relu',
-                            learning_rate = self.learning_rate,
-                            bn = True,
-                            name = 'RAPP')
+                         activation = 'relu',
+                         learning_rate = self.learning_rate,
+                         bn = True,
+                         name = 'RAPP')
 
         elif self.model_type == "DAGMM":
             model = DAGMM(comp_hidden_layer_sizes = self.layer_size, 
-                            comp_activation = 'tanh',
-                            est_hidden_layer_sizes = [3, 10, 4],
-                            est_activation = 'tanh',
-                            est_dropout_ratio = 0.5,
-                            learning_rate = self.learning_rate,
-                            bn = True,
-                            name='DAGMM')
+                          comp_activation = 'tanh',
+                          est_hidden_layer_sizes = [3, 10, 4],
+                          est_activation = 'tanh',
+                          est_dropout_ratio = 0.5,
+                          learning_rate = self.learning_rate,
+                          bn = True,
+                          name='DAGMM')
+
+        '''
+        You can add your autoencoder model here by inheriting Base in model_base.py.
+        '''
 
         model.num_batch = 0
         return model

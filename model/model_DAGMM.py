@@ -12,6 +12,7 @@ import tensorflow as tf
 
 from tensorflow.keras import Model, Sequential, optimizers
 from tensorflow.keras.layers import Dense, Layer, Dropout, BatchNormalization
+from model.model_base import BaseModel
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import auc,roc_curve, precision_recall_curve, average_precision_score, precision_recall_fscore_support
@@ -115,7 +116,7 @@ class GMM(Layer):
         diag_loss = tf.math.reduce_sum(tf.divide(1, tf.linalg.diag_part(self.sigma)))
         return diag_loss
         
-class DAGMM(Model):
+class DAGMM(BaseModel):
     def __init__(self,
                  comp_hidden_layer_sizes,
                  comp_activation,

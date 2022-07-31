@@ -11,6 +11,7 @@
 import tensorflow as tf
 import numpy as np
 
+from model.model_base import BaseModel
 from tensorflow.keras.layers import Dense, Layer, LeakyReLU, BatchNormalization, Activation
 from tensorflow.keras import Model, Sequential, activations
 
@@ -42,7 +43,7 @@ def NAP(H):
     
     return NAP
 
-class RAPP(Model):
+class RAPP(BaseModel):
     def __init__(self,
                  hidden_layer_sizes,
                  learning_rate = 1e-4,

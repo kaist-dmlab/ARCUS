@@ -10,6 +10,7 @@
 import tensorflow as tf
 import numpy as np
 
+from model.model_base import BaseModel
 from tensorflow.keras import optimizers, Model, activations, Sequential
 from tensorflow.keras.layers import Layer, Dense, Conv2D, Conv2DTranspose, BatchNormalization, Flatten, Reshape
 from sklearn.metrics import roc_auc_score, average_precision_score
@@ -40,7 +41,7 @@ class Renormalization(Layer):
     def call(self, y):
         return tf.math.l2_normalize(y, axis = -1)
 
-class RSRAE(Model):
+class RSRAE(BaseModel):
     
     def __init__(self, 
                  hidden_layer_sizes,

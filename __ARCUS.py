@@ -54,7 +54,7 @@ class ARCUS:
                 new_mm = (l_base.weights[2] * w1 + l_target.weights[2] * w2)
                 new_mv = (l_base.weights[3] * w1 + l_target.weights[3] * w2)
                 l_target.set_weights([new_gamma, new_beta, new_mm, new_mv])
-
+        
         # merge decoder
         for layer_idx in range(len(model2.decoder)):
             l_base = model1.decoder[layer_idx]
