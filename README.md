@@ -23,7 +23,7 @@ This is the implementation of ARCUS published in KDD 2022 [[paper](https://arxiv
 - init_epoch: initial number of epochs for creating models (default: 5)
 - intm_epoch: interim number of epochs for training models after initialization  (default: 1)
 - hidden_dims: latent dimensionality of AE (default: the number of pricipal component explaining at least 70% of variance)
-- layer_num: number of layers in AE
+- layer_num: the number of layers in AE
 - model_type: type of model, one of ["RAPP", "RSRAE", "DAGMM"]
 - inf_type: type of inference, one of ["INC", "ADP"] where "INC" for incremental and "ADP" for adaptive (proposed)
 
