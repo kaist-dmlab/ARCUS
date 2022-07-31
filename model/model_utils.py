@@ -8,12 +8,12 @@ Create your own ModelGenerator.
 '''
 class ModelGenerator:
     def __init__(self, args):
-
+        
         self.layer_size = []   
         gap = (args.input_dim - args.hidden_dim)/(args.layer_num-1)
         for idx in range(args.layer_num):
             self.layer_size.append(int(args.input_dim-(gap*idx)))
-
+        
         self.model_type = args.model_type
         self.learning_rate = args.learning_rate
         
