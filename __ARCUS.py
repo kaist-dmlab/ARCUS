@@ -60,8 +60,8 @@ class ARCUS:
             l_base = model1.decoder[layer_idx]
             l_target = model2.decoder[layer_idx]
             if l_base.name[:5] == 'layer':
-                new_weight = (l_base.weights[0] * w1 + l_target.weights[0]*w2)
-                new_bias = (l_base.weights[1] * w1 + l_target.weights[1]*w2)
+                new_weight = (l_base.weights[0] * w1 + l_target.weights[0] * w2)
+                new_bias = (l_base.weights[1] * w1 + l_target.weights[1] * w2)
                 l_target.set_weights([new_weight, new_bias])
             elif l_base.name[:2] == 'bn':
                 new_gamma = (l_base.weights[0] * w1 + l_target.weights[0] * w2)
