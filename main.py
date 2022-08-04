@@ -1,6 +1,6 @@
 import argparse
 import numpy as np
-from __ARCUS import ARCUS
+from ARCUS import ARCUS
 from datasets.data_utils import load_dataset
 from utils import set_gpu, set_seed
 
