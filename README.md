@@ -25,21 +25,12 @@ This is the implementation of ARCUS published in KDD 2022 [[paper](https://arxiv
 - min_batch_size: min batch size (default: 32)
 - init_epoch: initial number of epochs for creating models (default: 5)
 - intm_epoch: interim number of epochs for training models after initialization  (default: 1)
-- hidden_dims: latent dimensionality of AE (default: the number of pricipal component explaining at least 70% of variance)
+- hidden_dim: latent dimensionality of AE (default: the number of pricipal component explaining at least 70% of variance)
 - layer_num: the number of layers in AE
 
-### Example code
-Change the parameter values in test.py or test.ipynb following your test scenario and run the file. </br>
-A simplified sample code and output (the anomaly scores of all data records are also retruned).
+### Training script
 ```
-from ARCUS import *
-rand_seed = random.randint(0,1000)
-dataset = load_dataset(dataset_name)
-ARCUS_instance = ARCUS()
-returned, auc_hist, anomaly_scores = ARCUS_instance.simulator(parameters descried above)
-print("Data set:",dataset_name)
-print("Model type: ", model_type)
-print("AUC:", np.round(np.mean(auc_hist),3))
+$ python main.py --model_type RAPP --dataset_name MNIST_AbrRec --inf_type ADP --batch_size 512 --min_batch_size 32 --init_epoch 5 --intm_epoch 1 --hidden_dim 24 --layer_num 3 --learning_rate 1e-4 --reliability_thred 0.95 --similarity_thred 0.80 --seed 42 --gpu '0' 
 ----------------------------
 Data set: MNIST_AbrRec
 Model type:  RAPP
