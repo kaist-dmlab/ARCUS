@@ -11,7 +11,7 @@ This is the implementation of ARCUS published in KDD 2022 [[paper](https://arxiv
 
 ## Data sets description and link
 - The last column in each data set file refers to the anomaly label (1: anomaly, 0:normal)   </br>
-- [Data sets link](https://www.dropbox.com/sh/a3fhtp9zjjujrwa/AAD_4wkFaULuK-uJinbtw81Oa?dl=0) </br>
+- [Data sets link]([https://www.dropbox.com/sh/a3fhtp9zjjujrwa/AAD_4wkFaULuK-uJinbtw81Oa?dl=0](https://drive.google.com/drive/folders/1IeYCrG-eLJto25pfBQqZsXNeymQnLAvD?usp=sharing)) </br>
 - The link includes the small data sets (also included in the repository) and large data sets exceeding 100MB </br>
 <img src="figures/Data_sets.jpg" width="800"> 
 
